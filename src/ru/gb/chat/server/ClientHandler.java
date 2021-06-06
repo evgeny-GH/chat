@@ -36,6 +36,7 @@ public class ClientHandler {
                             }
                         }
                     }
+                    //Закртыие сокета и вызов удаления клиента из списка
                     while (true) {
                         String msg = in.readUTF();
                         if (msg.startsWith("/")) {

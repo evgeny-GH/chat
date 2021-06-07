@@ -26,13 +26,14 @@ public class Controller implements Initializable {
     TextField nicknameField;
     
     @FXML
-    HBox authPanel, msgPanel,regPanel,imgPanel;
+    HBox authPanel, msgPanel, regPanel, imgPanel;
     
     @FXML
     ListView<String> clientsList;
     private String nickname;
     private boolean authenticated;
-    public void sendMsg(){
+    
+    public void sendMsg() {
         String warning = validate();
         if (warning == null) {
             NetworkService.sendMessage(textField.getText());
@@ -42,6 +43,7 @@ public class Controller implements Initializable {
         }
         textField.requestFocus();
     }
+    
     private String validate() {
         String textFromField = textField.getText();
         String warning = null;
@@ -59,6 +61,7 @@ public class Controller implements Initializable {
         }
         return warning;
     }
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setAuthenticated(false);
@@ -74,7 +77,7 @@ public class Controller implements Initializable {
     }
     
     public void sendReg() {
-        if(loginField.getText().equals("") || passField.getText().equals("") || nicknameField.getText().equals("")) {
+        if (loginField.getText().equals("") || passField.getText().equals("") || nicknameField.getText().equals("")) {
             new Alert(Alert.AlertType.WARNING, "Вы ввели не все данные", ButtonType.OK).showAndWait();
         } else {
             NetworkService.sendReg(loginField.getText(), passField.getText(), nicknameField.getText());
@@ -85,7 +88,7 @@ public class Controller implements Initializable {
     }
     
     public void sendDelReg() {
-        if(loginField.getText().equals("") || passField.getText().equals("") || nicknameField.getText().equals("")) {
+        if (loginField.getText().equals("") || passField.getText().equals("") || nicknameField.getText().equals("")) {
             new Alert(Alert.AlertType.WARNING, "Для удаления введите все данные", ButtonType.OK).showAndWait();
         } else {
             NetworkService.sendDelReg(loginField.getText(), passField.getText(), nicknameField.getText());
@@ -96,7 +99,7 @@ public class Controller implements Initializable {
     }
     
     public void sendAuth() {
-        if(loginField.getText().equals("")|| passField.getText().equals("")) {
+        if (loginField.getText().equals("") || passField.getText().equals("")) {
             new Alert(Alert.AlertType.WARNING, "Вы ввели не все данные", ButtonType.OK).showAndWait();
         } else {
             NetworkService.sendAuth(loginField.getText(), passField.getText());
@@ -122,6 +125,7 @@ public class Controller implements Initializable {
             nickname = "";
         }
     }
+    
     public void setCallbacks() {
         NetworkService.setCallOnException(args -> new Alert(Alert.AlertType.WARNING, String.valueOf(args[0]), ButtonType.OK).showAndWait());
         NetworkService.setCallOnAuthenticated(args -> {

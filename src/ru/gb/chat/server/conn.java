@@ -1,6 +1,5 @@
 package ru.gb.chat.server;
 import java.sql.*;
-
 public class conn {
     
     public static Connection conn;

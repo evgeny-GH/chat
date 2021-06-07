@@ -74,7 +74,6 @@ public class NetworkService {
     public static void sendMessage(String message) {
         try {
             out.writeUTF(message);
-            // todo победить исключения в потоке
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override

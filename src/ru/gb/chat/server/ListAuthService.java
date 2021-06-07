@@ -6,11 +6,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ListAuthService implements AuthService, CrudService<User, Long> {
     private static ListAuthService INSTANCE;
     private final CopyOnWriteArrayList<User> users = new CopyOnWriteArrayList<>();
+    
     private ListAuthService() {
         for (int i = 0; i <= 10; i++) {
             users.add(new User("login" + i, "pass" + i, "nick" + i));
         }
     }
+    
     public static ListAuthService getInstance() {
         if (INSTANCE == null) {
             synchronized (ListAuthService.class) {
@@ -21,6 +23,7 @@ public class ListAuthService implements AuthService, CrudService<User, Long> {
         }
         return INSTANCE;
     }
+    
     @Override
     public User findByLoginAndPassword(String login, String password) {
         for (User u : users) {
@@ -50,8 +53,7 @@ public class ListAuthService implements AuthService, CrudService<User, Long> {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getLogin().equals(object.getLogin()) &&
                     users.get(i).getPassword().equals(object.getPassword()) &&
-                    users.get(i).getNickname().equals(object.getNickname()))
-            {
+                    users.get(i).getNickname().equals(object.getNickname())) {
                 users.remove(object);
                 return null;
             }
@@ -63,11 +65,13 @@ public class ListAuthService implements AuthService, CrudService<User, Long> {
     public List<User> findAll() {
         return null;
     }
+    
     // todo не надо
     @Override
     public User removeById(Long aLong) {
         return null;
     }
+    
     // todo не надо
     @Override
     public User findById(Long aLong) {

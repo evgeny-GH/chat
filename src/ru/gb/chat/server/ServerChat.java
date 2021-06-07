@@ -32,11 +32,13 @@ public class ServerChat {
             client.sendMessage(msg);
         }
     }
+    
     //Добавление польщователя в список
     public void subscribe(ClientHandler client) {
         clients.add(client);
         broadcastClientList();
     }
+    
     //Удаление из пользователя из списка
     public void unsubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);

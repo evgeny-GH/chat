@@ -12,26 +12,24 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
-    
     private final Map<String, Integer> uniqCheckMap = new HashMap<>();
-    
     @FXML
     TextArea textArea;
     @FXML
     TextField textField;
-    
     @FXML
     TextField loginField;
-    
     @FXML
     PasswordField passField;
     
     @FXML
-    HBox authPanel, msgPanel;
+    TextField nicknameField;
+    
+    @FXML
+    HBox authPanel, msgPanel, regPanel, imgPanel;
     
     @FXML
     ListView<String> clientsList;
-    
     private String nickname;
     private boolean authenticated;
     
@@ -43,10 +41,8 @@ public class Controller implements Initializable {
         } else {
             new Alert(Alert.AlertType.WARNING, warning, ButtonType.OK).showAndWait();
         }
-        
         textField.requestFocus();
     }
-    
     
     private String validate() {
         String textFromField = textField.getText();
@@ -80,16 +76,47 @@ public class Controller implements Initializable {
         setCallbacks();
     }
     
+    public void sendReg() {
+        if (loginField.getText().equals("") || passField.getText().equals("") || nicknameField.getText().equals("")) {
+            new Alert(Alert.AlertType.WARNING, "Вы ввели не все данные", ButtonType.OK).showAndWait();
+        } else {
+            NetworkService.sendReg(loginField.getText(), passField.getText(), nicknameField.getText());
+            loginField.clear();
+            passField.clear();
+            nicknameField.clear();
+        }
+    }
+    
+    public void sendDelReg() {
+        if (loginField.getText().equals("") || passField.getText().equals("") || nicknameField.getText().equals("")) {
+            new Alert(Alert.AlertType.WARNING, "Для удаления введите все данные", ButtonType.OK).showAndWait();
+        } else {
+            NetworkService.sendDelReg(loginField.getText(), passField.getText(), nicknameField.getText());
+            loginField.clear();
+            passField.clear();
+            nicknameField.clear();
+        }
+    }
+    
     public void sendAuth() {
-        NetworkService.sendAuth(loginField.getText(), passField.getText());
-        loginField.clear();
-        passField.clear();
+        if (loginField.getText().equals("") || passField.getText().equals("")) {
+            new Alert(Alert.AlertType.WARNING, "Вы ввели не все данные", ButtonType.OK).showAndWait();
+        } else {
+            NetworkService.sendAuth(loginField.getText(), passField.getText());
+            loginField.clear();
+            passField.clear();
+        }
     }
     
     public void setAuthenticated(boolean authenticated) {
         this.authenticated = authenticated;
+        regPanel.setVisible(!authenticated);
+        regPanel.setManaged(!authenticated);
+        imgPanel.setVisible(!authenticated);
+        imgPanel.setManaged(!authenticated);
         authPanel.setVisible(!authenticated);
         authPanel.setManaged(!authenticated);
+        
         msgPanel.setVisible(authenticated);
         msgPanel.setManaged(authenticated);
         clientsList.setVisible(authenticated);
@@ -97,17 +124,14 @@ public class Controller implements Initializable {
         if (!authenticated) {
             nickname = "";
         }
-        
     }
     
     public void setCallbacks() {
         NetworkService.setCallOnException(args -> new Alert(Alert.AlertType.WARNING, String.valueOf(args[0]), ButtonType.OK).showAndWait());
-        
         NetworkService.setCallOnAuthenticated(args -> {
             nickname = String.valueOf(args[0]);
             setAuthenticated(true);
         });
-        
         NetworkService.setCallOnMsgReceived(args -> {
             String msg = String.valueOf(args[0]);
             if (msg.startsWith("/")) {

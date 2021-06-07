@@ -1,11 +1,12 @@
 package ru.gb.chat.server;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ServerChat {
+    
     private final CopyOnWriteArrayList<ClientHandler> clients = new CopyOnWriteArrayList<>();
     
     public static void main(String[] args) {
@@ -31,11 +32,13 @@ public class ServerChat {
             client.sendMessage(msg);
         }
     }
+    
     //Добавление польщователя в список
     public void subscribe(ClientHandler client) {
         clients.add(client);
         broadcastClientList();
     }
+    
     //Удаление из пользователя из списка
     public void unsubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);
